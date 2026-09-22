@@ -1,0 +1,135 @@
+import React, { useState } from "react";
+import { COHORT_FACULTY_DATA } from "./data/cohortData";
+import { FacultyRecord } from "./types";
+import { Header } from "./components/Header";
+import { HodDashboard } from "./components/HodDashboard";
+import { FacultyDashboard } from "./components/FacultyDashboard";
+import { FacultyReviewDrawer } from "./components/FacultyReviewDrawer";
+import { AppraisalBriefModal } from "./components/AppraisalBriefModal";
+import { AggregateReportModal } from "./components/AggregateReportModal";
+
+export const App: React.FC = () => {
+  const [cohort, setCohort] = useState<FacultyRecord[]>(COHORT_FACULTY_DATA);
+  const [activeTab, setActiveTab] = useState<"hod" | "faculty" | "aggregate_report">("hod");
+
+  // Selected faculty for Faculty Portal (default to Kiran Kumar Kaveti - EMP 1913)
+  const [selectedFaculty, setSelectedFaculty] = useState<FacultyRecord>(
+    () => COHORT_FACULTY_DATA.find((f) => f.empId === "1913") || COHORT_FACULTY_DATA[0]
+  );
+
+  // Drawer state for HOD deep review
+  const [reviewFaculty, setReviewFaculty] = useState<FacultyRecord | null>(null);
+  const [isReviewDrawerOpen, setIsReviewDrawerOpen] = useState(false);
+
+  // Modal state for official appraisal brief
+  const [briefFaculty, setBriefFaculty] = useState<FacultyRecord | null>(null);
+  const [isBriefModalOpen, setIsBriefModalOpen] = useState(false);
+
+  // Modal state for aggregate report
+  const [isAggregateReportOpen, setIsAggregateReportOpen] = useState(false);
+
+  // Handlers
+  const handleSelectFacultyForReview = (faculty: FacultyRecord) => {
+    setReviewFaculty(faculty);
+    setIsReviewDrawerOpen(true);
+  };
+
+  const handleOpenAppraisalBrief = (faculty: FacultyRecord) => {
+    setBriefFaculty(faculty);
+    setIsBriefModalOpen(true);
+  };
+
+  const handleOpenFacultyPortal = (faculty: FacultyRecord) => {
+    setSelectedFaculty(faculty);
+    setActiveTab("faculty");
+  };
+
+  const handleUpdateFaculty = (updated: FacultyRecord) => {
+    setCohort((prev) => prev.map((f) => (f.empId === updated.empId ? updated : f)));
+    if (selectedFaculty.empId === updated.empId) {
+      setSelectedFaculty(updated);
+    }
+    if (reviewFaculty && reviewFaculty.empId === updated.empId) {
+      setReviewFaculty(updated);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col selection:bg-indigo-600 selection:text-white">
+      {/* Universal Top Header */}
+      <Header
+        activeTab={activeTab === "aggregate_report" ? "hod" : activeTab}
+        setActiveTab={(tab) => {
+          if (tab === "aggregate_report") {
+            setIsAggregateReportOpen(true);
+          } else {
+            setActiveTab(tab);
+          }
+        }}
+        selectedFacultyName={selectedFaculty.name}
+      />
+
+      {/* Main Container */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        {activeTab === "hod" ? (
+          <HodDashboard
+            cohort={cohort}
+            onSelectFacultyForReview={handleSelectFacultyForReview}
+            onOpenAppraisalBrief={handleOpenAppraisalBrief}
+            onOpenFacultyPortal={handleOpenFacultyPortal}
+          />
+        ) : (
+          <FacultyDashboard
+            faculty={selectedFaculty}
+            cohort={cohort}
+            onSelectFaculty={setSelectedFaculty}
+            onUpdateFaculty={handleUpdateFaculty}
+            onOpenAppraisalBrief={handleOpenAppraisalBrief}
+          />
+        )}
+      </main>
+
+      {/* HOD Review & Item Audit Drawer */}
+      {isReviewDrawerOpen && reviewFaculty && (
+        <FacultyReviewDrawer
+          faculty={reviewFaculty}
+          isOpen={isReviewDrawerOpen}
+          onClose={() => setIsReviewDrawerOpen(false)}
+          onUpdateFaculty={handleUpdateFaculty}
+          onOpenAppraisalBrief={handleOpenAppraisalBrief}
+        />
+      )}
+
+      {/* Official Executive Appraisal Brief Modal */}
+      {isBriefModalOpen && briefFaculty && (
+        <AppraisalBriefModal
+          faculty={briefFaculty}
+          isOpen={isBriefModalOpen}
+          onClose={() => {
+            setIsBriefModalOpen(false);
+            setBriefFaculty(null);
+          }}
+        />
+      )}
+
+      {/* Aggregate Department Quality Report Modal */}
+      {isAggregateReportOpen && (
+        <AggregateReportModal
+          cohort={cohort}
+          isOpen={isAggregateReportOpen}
+          onClose={() => setIsAggregateReportOpen(false)}
+        />
+      )}
+
+      {/* Footer */}
+      <footer className="border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-500 no-print mt-12">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+          <span>Vignan's Foundation for Science, Technology & Research • Internal Quality Assurance Cell (IQAC)</span>
+          <span className="font-mono text-slate-600 font-medium">Institutional Appraisal Engine • Capped at Max 999 Marks</span>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default App;
