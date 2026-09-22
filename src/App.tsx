@@ -7,7 +7,11 @@ import { FacultyDashboard } from "./components/FacultyDashboard";
 import { FacultyReviewDrawer } from "./components/FacultyReviewDrawer";
 import { AppraisalBriefModal } from "./components/AppraisalBriefModal";
 import { AggregateReportModal } from "./components/AggregateReportModal";
-import { fetchCohortFromSupabase, updateFacultyInSupabase } from "./services/facultyService";
+import { 
+  fetchCohortFromSupabase, 
+  updateFacultyInSupabase, 
+  subscribeToFacultyChanges 
+} from "./services/facultyService";
 
 export const App: React.FC = () => {
   const [cohort, setCohort] = useState<FacultyRecord[]>(COHORT_FACULTY_DATA);
@@ -32,7 +36,7 @@ export const App: React.FC = () => {
   // Modal state for aggregate report
   const [isAggregateReportOpen, setIsAggregateReportOpen] = useState(false);
 
-  // Fetch initial cohort from Supabase on mount
+  // Fetch initial cohort and subscribe to Supabase Realtime changes
   useEffect(() => {
     let isMounted = true;
 
@@ -43,8 +47,14 @@ export const App: React.FC = () => {
           if (remoteCohort && remoteCohort.length > 0) {
             setCohort(remoteCohort);
             // Synchronize selected faculty with fresh remote state
-            const currentSelected = remoteCohort.find((f) => f.empId === selectedFaculty.empId) || remoteCohort[0];
-            setSelectedFaculty(currentSelected);
+            setSelectedFaculty((prev) => {
+              return remoteCohort.find((f) => f.empId === prev.empId) || remoteCohort[0];
+            });
+            // Synchronize review faculty if drawer is currently open
+            setReviewFaculty((prev) => {
+              if (!prev) return null;
+              return remoteCohort.find((f) => f.empId === prev.empId) || prev;
+            });
           }
           setIsDatabaseConnected(fromDatabase);
         }
@@ -58,8 +68,14 @@ export const App: React.FC = () => {
 
     loadData();
 
+    // Live Realtime listener: whenever rows are added, edited, or deleted in Supabase Table Editor
+    const unsubscribe = subscribeToFacultyChanges(() => {
+      loadData();
+    });
+
     return () => {
       isMounted = false;
+      unsubscribe();
     };
   }, []);
 

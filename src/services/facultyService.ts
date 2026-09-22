@@ -319,3 +319,30 @@ export const updateClaimedItemInSupabase = async (
     return false;
   }
 };
+
+// Subscribe to Realtime Postgres Changes (INSERT, UPDATE, DELETE) on faculty and faculty_items
+export const subscribeToFacultyChanges = (onChanged: () => void) => {
+  const channel = supabase
+    .channel("faculty-realtime-sync")
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "faculty" },
+      (payload) => {
+        console.log("Realtime change detected in faculty table:", payload.eventType);
+        onChanged();
+      }
+    )
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "faculty_items" },
+      (payload) => {
+        console.log("Realtime change detected in faculty_items table:", payload.eventType);
+        onChanged();
+      }
+    )
+    .subscribe();
+
+  return () => {
+    supabase.removeChannel(channel);
+  };
+};
