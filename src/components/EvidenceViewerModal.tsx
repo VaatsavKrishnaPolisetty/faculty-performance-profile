@@ -30,7 +30,7 @@ export const EvidenceViewerModal: React.FC<EvidenceViewerModalProps> = ({
     setLocalItem(item);
   }, [item]);
 
-  // Listen for Escape key
+  // Listen for Escape key and manage body overflow & print class
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -39,7 +39,15 @@ export const EvidenceViewerModal: React.FC<EvidenceViewerModalProps> = ({
       }
     };
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.body.classList.add("has-modal-open");
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+      document.body.classList.remove("has-modal-open");
+    };
   }, [isOpen, onClose]);
 
   if (!isOpen || !localItem) return null;
@@ -73,9 +81,11 @@ FACULTY DETAILS:
 VERIFICATION AUDIT METADATA:
 - Digital Hash: SHA256:7f9a8b1c4e2d3f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a
 - Verified Timestamp: 2025-06-25T14:32:00Z
-- Certified By: Academic Audit Committee & Dean IQAC, VFSTR
-- Integrity Verification: SECURE & TAMPER-EVIDENT
-===============================================================`;
+- Verification Engine: VFSTR IQAC Automated Data Validator v2.4
+- Status: Digitally Authenticated & Locked
+
+===============================================================
+`;
 
     const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
@@ -116,13 +126,13 @@ VERIFICATION AUDIT METADATA:
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 md:p-8 bg-slate-900/50 backdrop-blur-xs transition-all duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 md:p-8 bg-slate-900/50 backdrop-blur-xs transition-all duration-200 printable-modal-backdrop"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
       <div
-        className="bg-white border border-slate-200 rounded-3xl max-w-3xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden text-slate-900 animate-in fade-in zoom-in-95 duration-150"
+        className="bg-white border border-slate-200 rounded-3xl max-w-3xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden text-slate-900 animate-in fade-in zoom-in-95 duration-150 printable-modal-card"
         role="dialog"
         aria-modal="true"
       >
@@ -187,7 +197,7 @@ VERIFICATION AUDIT METADATA:
         </div>
 
         {/* Scrollable Document Preview Body */}
-        <div className="overflow-y-auto p-6 sm:p-8 space-y-6 flex-1 text-xs">
+        <div className="overflow-y-auto p-6 sm:p-8 space-y-6 flex-1 text-xs printable-modal-body">
           
           {/* Institutional Document Header */}
           <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">

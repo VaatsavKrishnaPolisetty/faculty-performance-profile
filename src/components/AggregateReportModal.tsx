@@ -25,10 +25,12 @@ export const AggregateReportModal: React.FC<AggregateReportModalProps> = ({
     window.addEventListener("keydown", handleKeyDown);
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    document.body.classList.add("has-modal-open");
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = originalOverflow;
+      document.body.classList.remove("has-modal-open");
     };
   }, [isOpen, onClose]);
 
@@ -50,13 +52,13 @@ export const AggregateReportModal: React.FC<AggregateReportModalProps> = ({
 
   return createPortal(
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 md:p-8 bg-slate-900/50 backdrop-blur-xs transition-all duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 md:p-8 bg-slate-900/50 backdrop-blur-xs transition-all duration-200 printable-modal-backdrop"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
       <div 
-        className="bg-white border border-slate-200 rounded-3xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden text-slate-900 my-auto animate-in fade-in zoom-in-95 duration-150"
+        className="bg-white border border-slate-200 rounded-3xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden text-slate-900 my-auto animate-in fade-in zoom-in-95 duration-150 printable-modal-card"
         role="dialog"
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}
@@ -93,10 +95,10 @@ export const AggregateReportModal: React.FC<AggregateReportModalProps> = ({
         </div>
 
         {/* Scrollable Content */}
-        <div className="overflow-y-auto p-6 sm:p-8 space-y-6 flex-1 text-xs">
+        <div className="overflow-y-auto p-6 sm:p-8 space-y-6 flex-1 text-xs printable-modal-body">
           
           {/* Institution Letterhead */}
-          <div className="text-center space-y-1.5 pb-5 border-b border-slate-200">
+          <div className="text-center space-y-1.5 pb-5 border-b border-slate-200 print-break-inside-avoid">
             <h1 className="text-lg sm:text-xl font-black uppercase text-slate-900 tracking-wide">
               Vignan's Foundation for Science, Technology & Research
             </h1>
@@ -109,7 +111,7 @@ export const AggregateReportModal: React.FC<AggregateReportModalProps> = ({
           </div>
 
           {/* Department KPIs Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center print-break-inside-avoid">
             <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
               <span className="text-[10px] text-slate-500 font-mono uppercase block">Total CSE Faculty</span>
               <span className="text-2xl font-black text-slate-900 font-mono">{total}</span>
@@ -136,7 +138,7 @@ export const AggregateReportModal: React.FC<AggregateReportModalProps> = ({
           </div>
 
           {/* Cadre Ratio & Research Output */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs print-break-inside-avoid">
             <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3">
               <span className="font-bold text-slate-900 block text-sm">Cadre Distribution (AICTE Norms):</span>
               <div className="space-y-2 text-slate-700">
@@ -175,7 +177,7 @@ export const AggregateReportModal: React.FC<AggregateReportModalProps> = ({
           </div>
 
           {/* Institutional Quality Enhancements */}
-          <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5 text-xs">
+          <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5 text-xs print-break-inside-avoid">
             <span className="font-bold text-slate-900 text-sm block">Strategic Quality Directives (IQAC Recommendations):</span>
             <ol className="list-decimal list-inside space-y-1.5 text-slate-700 leading-relaxed">
               <li>Increase extramural research grant applications targeting SERB-CRG, DST-CSRI, and AICTE RPS schemes.</li>
@@ -186,7 +188,7 @@ export const AggregateReportModal: React.FC<AggregateReportModalProps> = ({
           </div>
 
           {/* Approval Signatures */}
-          <div className="grid grid-cols-2 gap-8 pt-6 border-t border-slate-200 text-center text-xs text-slate-500">
+          <div className="grid grid-cols-2 gap-8 pt-6 border-t border-slate-200 text-center text-xs text-slate-500 print-break-inside-avoid">
             <div className="space-y-4">
               <div className="h-6 flex items-end justify-center font-serif italic text-cyan-700 font-semibold">Dr. K. V. Krishna Kishore</div>
               <div className="border-t border-slate-300 pt-1.5">

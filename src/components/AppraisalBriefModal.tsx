@@ -25,10 +25,12 @@ export const AppraisalBriefModal: React.FC<AppraisalBriefModalProps> = ({
     window.addEventListener("keydown", handleKeyDown);
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    document.body.classList.add("has-modal-open");
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = originalOverflow;
+      document.body.classList.remove("has-modal-open");
     };
   }, [isOpen, onClose]);
 
@@ -40,13 +42,13 @@ export const AppraisalBriefModal: React.FC<AppraisalBriefModalProps> = ({
 
   return createPortal(
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 md:p-8 bg-slate-900/50 backdrop-blur-xs transition-all duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 md:p-8 bg-slate-900/50 backdrop-blur-xs transition-all duration-200 printable-modal-backdrop"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
       <div 
-        className="bg-white border border-slate-200 rounded-3xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden text-slate-900 my-auto animate-in fade-in zoom-in-95 duration-150"
+        className="bg-white border border-slate-200 rounded-3xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden text-slate-900 my-auto animate-in fade-in zoom-in-95 duration-150 printable-modal-card"
         role="dialog"
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}
@@ -83,10 +85,10 @@ export const AppraisalBriefModal: React.FC<AppraisalBriefModalProps> = ({
         </div>
 
         {/* Scrollable Printable Document Body */}
-        <div className="overflow-y-auto p-6 sm:p-8 space-y-6 flex-1 text-xs">
+        <div className="overflow-y-auto p-6 sm:p-8 space-y-6 flex-1 text-xs printable-modal-body">
           
           {/* Official Letterhead */}
-          <div className="text-center space-y-1.5 pb-5 border-b border-slate-200">
+          <div className="text-center space-y-1.5 pb-5 border-b border-slate-200 print-break-inside-avoid">
             <h1 className="text-lg sm:text-xl font-black tracking-wide text-slate-900 uppercase">
               Vignan's Foundation for Science, Technology & Research
             </h1>
@@ -99,7 +101,7 @@ export const AppraisalBriefModal: React.FC<AppraisalBriefModalProps> = ({
           </div>
 
           {/* Candidate Profile Card */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs print-break-inside-avoid">
             <div>
               <span className="text-slate-500 text-[10px] uppercase font-mono block">Faculty Name</span>
               <span className="font-bold text-slate-900 text-sm">{faculty.name}</span>
@@ -119,7 +121,7 @@ export const AppraisalBriefModal: React.FC<AppraisalBriefModalProps> = ({
           </div>
 
           {/* Dimension Scorecard Table */}
-          <div className="space-y-3">
+          <div className="space-y-3 print-break-inside-avoid">
             <div className="flex items-center justify-between">
               <h3 className="text-xs font-mono uppercase text-slate-700 font-bold">
                 I. Quantitative Dimension Scorecard & Rubric Audit (Max 999 Marks)
@@ -198,7 +200,7 @@ export const AppraisalBriefModal: React.FC<AppraisalBriefModalProps> = ({
           </div>
 
           {/* Contextual Disclosures & Fair Adjustment */}
-          <div className="p-5 rounded-2xl bg-indigo-50/70 border border-indigo-200 space-y-3">
+          <div className="p-5 rounded-2xl bg-indigo-50/70 border border-indigo-200 space-y-3 print-break-inside-avoid">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <span className="font-bold text-slate-900 uppercase text-[11px] font-mono tracking-wide">
                 II. Contextual Equity Evaluation & Research Safeguard
@@ -219,7 +221,7 @@ export const AppraisalBriefModal: React.FC<AppraisalBriefModalProps> = ({
           </div>
 
           {/* Multi-cycle trend comparison */}
-          <div className="space-y-2.5">
+          <div className="space-y-2.5 print-break-inside-avoid">
             <span className="font-bold text-slate-700 uppercase text-[11px] font-mono block">
               III. 3-Year Historical Performance Trajectory (2023–2025)
             </span>
@@ -237,7 +239,7 @@ export const AppraisalBriefModal: React.FC<AppraisalBriefModalProps> = ({
           </div>
 
           {/* HOD Assessment Remarks */}
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 print-break-inside-avoid">
             <span className="font-bold text-slate-900 block">IV. HOD Official Assessment & Action Recommendation</span>
             <p className="text-slate-700 italic text-xs leading-relaxed">
               "{faculty.hodRemarks || "Faculty exhibits consistent dedication across curriculum delivery and infrastructure management. Recommend focusing on external research funding in next appraisal cycle."}"
@@ -245,7 +247,7 @@ export const AppraisalBriefModal: React.FC<AppraisalBriefModalProps> = ({
           </div>
 
           {/* Formal Signature Block */}
-          <div className="grid grid-cols-3 gap-6 pt-6 border-t border-slate-200 text-center text-xs text-slate-500">
+          <div className="grid grid-cols-3 gap-6 pt-6 border-t border-slate-200 text-center text-xs text-slate-500 print-break-inside-avoid">
             <div className="space-y-4">
               <div className="h-7 flex items-end justify-center font-serif italic text-indigo-600 text-sm">
                 {faculty.name}

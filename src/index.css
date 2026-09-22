@@ -78,21 +78,97 @@
   background: #94a3b8;
 }
 
-/* Print Styles for Appraisal Brief & Reports */
+/* Comprehensive Print Styles for Appraisal Brief & Reports */
 @media print {
-  body {
-    background: #ffffff !important;
-    color: #000000 !important;
+  @page {
+    margin: 12mm 15mm 12mm 15mm;
+    size: auto;
   }
+
+  /* When printing from an open modal, completely hide the background app root */
+  body.has-modal-open #root,
+  body:has(.printable-modal-backdrop) #root {
+    display: none !important;
+  }
+
+  html, body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  /* Strip all fixed modal positioning and dark backdrop in print */
+  .printable-modal-backdrop {
+    position: static !important;
+    inset: auto !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    z-index: auto !important;
+  }
+
+  .printable-modal-card {
+    position: static !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .printable-modal-body {
+    overflow: visible !important;
+    max-height: none !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block !important;
+  }
+
+  /* Hide interactive toolbar elements, buttons, and headers marked no-print */
   .no-print {
     display: none !important;
   }
+
   .print-only {
     display: block !important;
   }
-  .glass-panel {
-    background: transparent !important;
-    border: 1px solid #cbd5e1 !important;
-    box-shadow: none !important;
+
+  /* Prevent awkward page cuts in sections and tables */
+  .print-break-inside-avoid,
+  .print-section,
+  table,
+  tr,
+  .signature-block {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Optimize contrast and borders */
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  th, td {
+    border-color: #cbd5e1 !important;
   }
 }
