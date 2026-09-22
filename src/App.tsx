@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { COHORT_FACULTY_DATA } from "./data/cohortData";
 import { FacultyRecord } from "./types";
 import { Header } from "./components/Header";
@@ -7,10 +7,14 @@ import { FacultyDashboard } from "./components/FacultyDashboard";
 import { FacultyReviewDrawer } from "./components/FacultyReviewDrawer";
 import { AppraisalBriefModal } from "./components/AppraisalBriefModal";
 import { AggregateReportModal } from "./components/AggregateReportModal";
+import { fetchCohortFromSupabase, updateFacultyInSupabase } from "./services/facultyService";
 
 export const App: React.FC = () => {
   const [cohort, setCohort] = useState<FacultyRecord[]>(COHORT_FACULTY_DATA);
   const [activeTab, setActiveTab] = useState<"hod" | "faculty" | "aggregate_report">("hod");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isDatabaseConnected, setIsDatabaseConnected] = useState<boolean>(true);
+  const [isSyncing, setIsSyncing] = useState<boolean>(false);
 
   // Selected faculty for Faculty Portal (default to Kiran Kumar Kaveti - EMP 1913)
   const [selectedFaculty, setSelectedFaculty] = useState<FacultyRecord>(
@@ -28,6 +32,37 @@ export const App: React.FC = () => {
   // Modal state for aggregate report
   const [isAggregateReportOpen, setIsAggregateReportOpen] = useState(false);
 
+  // Fetch initial cohort from Supabase on mount
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadData = async () => {
+      try {
+        const { cohort: remoteCohort, fromDatabase } = await fetchCohortFromSupabase();
+        if (isMounted) {
+          if (remoteCohort && remoteCohort.length > 0) {
+            setCohort(remoteCohort);
+            // Synchronize selected faculty with fresh remote state
+            const currentSelected = remoteCohort.find((f) => f.empId === selectedFaculty.empId) || remoteCohort[0];
+            setSelectedFaculty(currentSelected);
+          }
+          setIsDatabaseConnected(fromDatabase);
+        }
+      } catch (err) {
+        console.error("Error loading cohort from Supabase:", err);
+        if (isMounted) setIsDatabaseConnected(false);
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    };
+
+    loadData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   // Handlers
   const handleSelectFacultyForReview = (faculty: FacultyRecord) => {
     setReviewFaculty(faculty);
@@ -44,7 +79,8 @@ export const App: React.FC = () => {
     setActiveTab("faculty");
   };
 
-  const handleUpdateFaculty = (updated: FacultyRecord) => {
+  const handleUpdateFaculty = async (updated: FacultyRecord) => {
+    // 1. Optimistic UI update
     setCohort((prev) => prev.map((f) => (f.empId === updated.empId ? updated : f)));
     if (selectedFaculty.empId === updated.empId) {
       setSelectedFaculty(updated);
@@ -52,11 +88,21 @@ export const App: React.FC = () => {
     if (reviewFaculty && reviewFaculty.empId === updated.empId) {
       setReviewFaculty(updated);
     }
+
+    // 2. Persist to Supabase in background
+    setIsSyncing(true);
+    try {
+      await updateFacultyInSupabase(updated);
+    } catch (err) {
+      console.error("Failed to persist faculty update to Supabase:", err);
+    } finally {
+      setIsSyncing(false);
+    }
   };
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col selection:bg-indigo-600 selection:text-white">
-      {/* Universal Top Header */}
+      {/* Universal Top Header with Supabase Connection State */}
       <Header
         activeTab={activeTab === "aggregate_report" ? "hod" : activeTab}
         setActiveTab={(tab) => {
@@ -67,6 +113,8 @@ export const App: React.FC = () => {
           }
         }}
         selectedFacultyName={selectedFaculty.name}
+        isDatabaseConnected={isDatabaseConnected}
+        isSyncing={isSyncing}
       />
 
       {/* Main Container */}
