@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { createPortal } from "react-dom";
 import { 
   X, Printer, Download, ShieldCheck, FileText, CheckCircle2, 
   Building, Calendar, Hash, UserCheck, Upload, Image as ImageIcon,
@@ -124,7 +125,7 @@ VERIFICATION AUDIT METADATA:
     reader.readAsDataURL(file);
   };
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 md:p-8 bg-slate-900/50 backdrop-blur-xs transition-all duration-200 printable-modal-backdrop"
       onClick={(e) => {
@@ -135,6 +136,7 @@ VERIFICATION AUDIT METADATA:
         className="bg-white border border-slate-200 rounded-3xl max-w-3xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden text-slate-900 animate-in fade-in zoom-in-95 duration-150 printable-modal-card"
         role="dialog"
         aria-modal="true"
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Sticky Header */}
         <div className="sticky top-0 z-20 bg-white/95 backdrop-blur-md px-6 py-4 border-b border-slate-200 flex items-center justify-between no-print">
@@ -200,7 +202,7 @@ VERIFICATION AUDIT METADATA:
         <div className="overflow-y-auto p-6 sm:p-8 space-y-6 flex-1 text-xs printable-modal-body">
           
           {/* Institutional Document Header */}
-          <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
+          <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-4 print-break-inside-avoid">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-slate-200">
               <div className="space-y-1">
                 <span className="text-[10px] font-mono text-indigo-600 uppercase font-bold tracking-widest block">
@@ -274,7 +276,7 @@ VERIFICATION AUDIT METADATA:
           )}
 
           {/* Authentic Context-Specific Document Preview Content */}
-          <div className="p-6 rounded-2xl bg-slate-50/70 border border-slate-200 space-y-4 font-mono text-[11px]">
+          <div className="p-6 rounded-2xl bg-slate-50/70 border border-slate-200 space-y-4 font-mono text-[11px] print-break-inside-avoid">
             <div className="flex items-center justify-between pb-3 border-b border-slate-200">
               <span className="font-bold text-slate-700 uppercase tracking-wide text-xs">
                 DOCUMENT BODY & DATA EXTRACT
@@ -535,6 +537,13 @@ VERIFICATION AUDIT METADATA:
               <span>Download Proof</span>
             </button>
             <button
+              onClick={handlePrint}
+              className="px-3.5 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-colors"
+            >
+              <Printer className="size-3.5" />
+              <span>Print Proof</span>
+            </button>
+            <button
               onClick={onClose}
               className="px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold cursor-pointer transition-colors shadow-xs"
             >
@@ -544,6 +553,7 @@ VERIFICATION AUDIT METADATA:
         </div>
 
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
