@@ -4,6 +4,7 @@ import {
   Sparkles, CheckCircle2, Award, User, HelpCircle, Layers
 } from "lucide-react";
 import { FacultyRecord } from "../../types";
+import { SpotlightCard } from "../reactbits/SpotlightCard";
 
 interface InstitutionalAnalyticsCardProps {
   cohort: FacultyRecord[];
@@ -134,11 +135,11 @@ export const InstitutionalAnalyticsCard: React.FC<InstitutionalAnalyticsCardProp
         </div>
       </div>
 
-      {/* Top High-Level Analytics: Donut Ring Chart + Dimension Progress */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-6 border-b border-slate-100">
+      {/* Top High-Level Analytics: Donut Ring Chart + Dimension Progress with Spotlight Hover */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pb-6 border-b border-slate-100">
         
         {/* Outcome Status Donut Chart */}
-        <div className="lg:col-span-4 flex flex-col justify-between">
+        <SpotlightCard spotlightColor="rgba(16, 185, 129, 0.08)" className="lg:col-span-4 p-5 rounded-2xl border border-slate-200 flex flex-col justify-between">
           <span className="text-xs font-bold text-slate-800 tracking-wide block">
             Outcome Status Distribution
           </span>
@@ -201,10 +202,10 @@ export const InstitutionalAnalyticsCard: React.FC<InstitutionalAnalyticsCardProp
               </span>
             </div>
           </div>
-        </div>
+        </SpotlightCard>
 
         {/* Dimension Attainment Distribution & Breakdown */}
-        <div className="lg:col-span-8 flex flex-col justify-between pl-0 lg:pl-6 border-t lg:border-t-0 lg:border-l border-slate-100 pt-6 lg:pt-0">
+        <SpotlightCard spotlightColor="rgba(99, 102, 241, 0.08)" className="lg:col-span-8 p-5 rounded-2xl border border-slate-200 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between">
               <div>
@@ -298,7 +299,7 @@ export const InstitutionalAnalyticsCard: React.FC<InstitutionalAnalyticsCardProp
               </span>
             </div>
           </div>
-        </div>
+        </SpotlightCard>
 
       </div>
 

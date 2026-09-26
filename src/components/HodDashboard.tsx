@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { FacultyRecord } from "../types";
 import { AnimatedCounter } from "./reactbits/AnimatedCounter";
+import { SpotlightCard } from "./reactbits/SpotlightCard";
 import { InstitutionalAnalyticsCard } from "./analytics/InstitutionalAnalyticsCard";
 
 interface HodDashboardProps {
@@ -170,9 +171,9 @@ export const HodDashboard: React.FC<HodDashboardProps> = ({
         </div>
       </div>
 
-      {/* KPI Cards Grid (Minimal Light) */}
+      {/* KPI Cards Grid (Minimal Light with Interactive Spotlight Hover) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs">
+        <SpotlightCard spotlightColor="rgba(99, 102, 241, 0.12)" className="p-5">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Cohort Size</span>
             <div className="p-2 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-100">
@@ -188,9 +189,9 @@ export const HodDashboard: React.FC<HodDashboardProps> = ({
               <span>42 Full-time CSE Teaching Faculty</span>
             </p>
           </div>
-        </div>
+        </SpotlightCard>
 
-        <div className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs">
+        <SpotlightCard spotlightColor="rgba(14, 165, 233, 0.12)" className="p-5">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Teaching-Learning Efficacy</span>
             <div className="p-2 rounded-xl bg-cyan-50 text-cyan-600 border border-cyan-100">
@@ -205,9 +206,9 @@ export const HodDashboard: React.FC<HodDashboardProps> = ({
               <span className="text-cyan-600 font-semibold">86.5%</span> avg attainment in Part A
             </p>
           </div>
-        </div>
+        </SpotlightCard>
 
-        <div className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs">
+        <SpotlightCard spotlightColor="rgba(168, 85, 247, 0.12)" className="p-5">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Heavy Admin Burden</span>
             <div className="p-2 rounded-xl bg-purple-50 text-purple-600 border border-purple-100">
@@ -222,9 +223,9 @@ export const HodDashboard: React.FC<HodDashboardProps> = ({
               Carrying &ge;12 hrs/wk institutional governance
             </p>
           </div>
-        </div>
+        </SpotlightCard>
 
-        <div className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs">
+        <SpotlightCard spotlightColor="rgba(16, 185, 129, 0.12)" className="p-5">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Contextually Elevated</span>
             <div className="p-2 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100">
@@ -239,7 +240,7 @@ export const HodDashboard: React.FC<HodDashboardProps> = ({
               Shielded from heavy workload penalties
             </p>
           </div>
-        </div>
+        </SpotlightCard>
       </div>
 
       {/* Analytical Charts Component with Scrollable Faculty 999 Score Graph */}

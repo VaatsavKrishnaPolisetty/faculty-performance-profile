@@ -10,6 +10,7 @@ import { calculateDimensionScores, computeWeightedPercentage, getScoringBand } f
 import { evaluateContextualEquity } from "../utils/contextualEngine";
 import confetti from "canvas-confetti";
 import { EvidenceViewerModal } from "./EvidenceViewerModal";
+import { SpotlightCard } from "./reactbits/SpotlightCard";
 
 interface FacultyReviewDrawerProps {
   faculty: FacultyRecord;
@@ -160,33 +161,33 @@ export const FacultyReviewDrawer: React.FC<FacultyReviewDrawerProps> = ({
           </div>
         </div>
 
-        {/* Live Score Overview Banner */}
+        {/* Live Score Overview Banner with Spotlight Hover */}
         <div className="p-6 bg-slate-50/70 border-b border-slate-200 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-          <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-2xs">
+          <SpotlightCard spotlightColor="rgba(14, 165, 233, 0.12)" className="p-3 rounded-xl border border-slate-200 shadow-2xs">
             <span className="text-[10px] text-slate-500 font-mono uppercase block">Teaching (TL)</span>
             <span className="text-lg font-black text-slate-900 font-mono">{dimScores.teaching}</span>
             <span className="text-[10px] text-slate-400 block">/ 333 pts</span>
-          </div>
+          </SpotlightCard>
 
-          <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-2xs">
+          <SpotlightCard spotlightColor="rgba(99, 102, 241, 0.12)" className="p-3 rounded-xl border border-slate-200 shadow-2xs">
             <span className="text-[10px] text-slate-500 font-mono uppercase block">Research (R&D)</span>
             <span className="text-lg font-black text-slate-900 font-mono">{dimScores.research}</span>
             <span className="text-[10px] text-slate-400 block">/ 333 pts</span>
-          </div>
+          </SpotlightCard>
 
-          <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-2xs">
+          <SpotlightCard spotlightColor="rgba(168, 85, 247, 0.12)" className="p-3 rounded-xl border border-slate-200 shadow-2xs">
             <span className="text-[10px] text-slate-500 font-mono uppercase block">Governance</span>
             <span className="text-lg font-black text-slate-900 font-mono">{dimScores.governance}</span>
             <span className="text-[10px] text-slate-400 block">/ 333 pts</span>
-          </div>
+          </SpotlightCard>
 
-          <div className="bg-indigo-50/70 p-3 rounded-xl border border-indigo-200 shadow-2xs">
+          <SpotlightCard spotlightColor="rgba(16, 185, 129, 0.12)" className="bg-indigo-50/70 p-3 rounded-xl border border-indigo-200 shadow-2xs">
             <span className="text-[10px] text-indigo-700 font-mono uppercase block font-semibold">Raw Total (Cap 999)</span>
             <span className="text-xl font-black text-indigo-700 font-mono">{dimScores.total}</span>
             <span className="text-[10px] text-emerald-700 font-bold block">
               Grade {band.grade} ({weightedPct}%)
             </span>
-          </div>
+          </SpotlightCard>
         </div>
 
         {/* Drawer Tabs */}
@@ -536,7 +537,7 @@ export const FacultyReviewDrawer: React.FC<FacultyReviewDrawerProps> = ({
               />
             </div>
 
-            <div className="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200 text-xs text-indigo-950 space-y-2">
+            <SpotlightCard spotlightColor="rgba(99, 102, 241, 0.08)" className="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200 text-xs text-indigo-950 space-y-2">
               <span className="font-bold text-slate-900 block">Verification Summary:</span>
               <div className="flex justify-between">
                 <span>Verified Score Cap:</span>
@@ -550,7 +551,7 @@ export const FacultyReviewDrawer: React.FC<FacultyReviewDrawerProps> = ({
                 <span>Context-Fair Adjusted Grade:</span>
                 <span className="font-mono font-bold text-emerald-700">{contextAdj.adjustedGrade} ({contextAdj.adjustedPercentage}%)</span>
               </div>
-            </div>
+            </SpotlightCard>
 
             {isSaved && (
               <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs flex items-center gap-2">
