@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "VFSTR Faculty Performance & Appraisal Architecture",
+    "output": "faculty-appraisal-architecture.html",
+    "quality_profile": "standard",
+    "views": [
+      {
+        "id": "full-system",
+        "label": "Full Platform Topology",
+        "focus": ["erp", "lms", "scopus", "ingestion", "equity_engine", "supabase_db", "supabase_realtime", "faculty_portal", "hod_portal", "appraisal_brief", "naac_report"],
+        "note": "Complete end-to-end architecture from institutional pipelines to executive decision briefs."
+      },
+      {
+        "id": "ingestion-and-equity",
+        "label": "Data Pipeline & Equity Safeguards",
+        "focus": ["erp", "lms", "scopus", "ingestion", "equity_engine", "supabase_db"],
+        "note": "How enterprise ERP, LMS, and Scopus publications flow into the algorithmic equity engine."
+      },
+      {
+        "id": "realtime-collaboration",
+        "label": "Live Realtime Sync & Dual Portals",
+        "focus": ["supabase_db", "supabase_realtime", "faculty_portal", "hod_portal"],
+        "note": "WebSocket synchronization between Dr. S V Phani Kumar's HOD Suite and Faculty self-appraisals."
+      },
+      {
+        "id": "audit-outputs",
+        "label": "Accreditation & Print Dossiers",
+        "focus": ["faculty_portal", "hod_portal", "appraisal_brief", "naac_report"],
+        "note": "Isolated print stylesheets and cryptographic verification certificates for NAAC/NBA compliance."
+      }
+    ]
+  },
+  "components": [
+    { "id": "erp", "type": "cloud", "label": "Enterprise ERP", "sublabel": "Attendance & Duties", "pos": [40, 160], "size": [140, 64], "tag": "VFSTR ERP" },
+    { "id": "lms", "type": "cloud", "label": "Moodle LMS", "sublabel": "Course Files & CO-PO", "pos": [40, 290], "size": [140, 64], "tag": "NBA Attainment" },
+    { "id": "scopus", "type": "external", "label": "Elsevier Scopus", "sublabel": "API Indexed Articles", "pos": [40, 420], "size": [140, 64], "tag": "ESCI / Scopus" },
+    
+    { "id": "ingestion", "type": "backend", "label": "Data Ingestion Pipeline", "sublabel": "Normalize & Map Rubric", "pos": [260, 290], "size": [160, 64], "tag": "999 Cap" },
+    { "id": "equity_engine", "type": "backend", "label": "Contextual Engine", "sublabel": "Fair Workload Shield", "pos": [500, 160], "size": [160, 64], "tag": "Algorithmic Lift" },
+
+    { "id": "supabase_db", "type": "database", "label": "Supabase Postgres", "sublabel": "Faculty & Metric Store", "pos": [500, 360], "size": [160, 64], "tag": "PostgreSQL 15" },
+    { "id": "supabase_realtime", "type": "messagebus", "label": "Realtime Engine", "sublabel": "WebSocket Broadcast", "pos": [740, 200], "size": [150, 64], "tag": "Postgres CDC" },
+
+    { "id": "faculty_portal", "type": "external", "label": "Faculty Self-Audit", "sublabel": "Portal & Disclosures", "pos": [970, 160], "size": [150, 64], "tag": "React 19 SPA" },
+    { "id": "hod_portal", "type": "external", "label": "HOD Executive Suite", "sublabel": "Dr. S V Phani Kumar", "pos": [970, 350], "size": [150, 64], "tag": "Executive Console" },
+
+    { "id": "appraisal_brief", "type": "security", "label": "Appraisal Brief", "sublabel": "Signed Audit Record", "pos": [1200, 200], "size": [150, 64], "tag": "Print Isolated" },
+    { "id": "naac_report", "type": "security", "label": "Accreditation Dossier", "sublabel": "NAAC / NBA Quality", "pos": [1200, 350], "size": [150, 64], "tag": "IQAC Certified" }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Institutional Data Ingestion Layer", "wraps": ["erp", "lms", "scopus"] },
+    { "kind": "region", "label": "Algorithmic Engine & Supabase Cloud", "wraps": ["ingestion", "equity_engine", "supabase_db", "supabase_realtime"] },
+    { "kind": "security-group", "label": "Client Portals & Executive Governance", "wraps": ["faculty_portal", "hod_portal"] },
+    { "kind": "region", "label": "Accreditation & Certified Dossiers", "wraps": ["appraisal_brief", "naac_report"] }
+  ],
+  "connections": [
+    { "id": "erp-to-ingestion", "from": "erp", "to": "ingestion", "label": "Teaching Logs" },
+    { "id": "lms-to-ingestion", "from": "lms", "to": "ingestion", "label": "Course Files" },
+    { "id": "scopus-to-ingestion", "from": "scopus", "to": "ingestion", "label": "Journal DOIs" },
+
+    { "id": "ingestion-to-equity", "from": "ingestion", "to": "equity_engine", "label": "Raw Metrics" },
+    { "id": "ingestion-to-db", "from": "ingestion", "to": "supabase_db", "label": "Verified Claims" },
+    { "id": "equity-to-db", "from": "equity_engine", "to": "supabase_db", "label": "Equity Lift", "labelDy": 24 },
+
+    { "id": "db-to-realtime", "from": "supabase_db", "to": "supabase_realtime", "label": "CDC Replication" },
+
+    { "id": "realtime-to-faculty", "from": "supabase_realtime", "to": "faculty_portal", "label": "Live Socket" },
+    { "id": "realtime-to-hod", "from": "supabase_realtime", "to": "hod_portal", "label": "Live Sync" },
+    { "id": "faculty-to-db", "from": "faculty_portal", "to": "supabase_db", "label": "Self Claims", "variant": "dashed" },
+    { "id": "hod-to-db", "from": "hod_portal", "to": "supabase_db", "label": "HOD Review", "variant": "emphasis" },
+
+    { "id": "hod-to-brief", "from": "hod_portal", "to": "appraisal_brief", "label": "Official Sign" },
+    { "id": "hod-to-naac", "from": "hod_portal", "to": "naac_report", "label": "IQAC Dossier" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Data Ingestion & Verification",
+      "items": [
+        "ERP attendance and contact hour records automated feed",
+        "Moodle LMS syllabus compliance, lecture notes, and CO-PO direct attainments",
+        "Elsevier Scopus API automated verification of journal publications and DOIs"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Contextual Equity Safeguards",
+      "items": [
+        "Normalizes research bandwidth against heavy administrative duties (≥12 hrs/wk)",
+        "Compensates for course difficulty index (up to 5.0) and remedial student intake",
+        "Circle Repulsion relaxation solver eliminates overlap in 2D scatter matrix"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Realtime Sync & Dual Portals",
+      "items": [
+        "Supabase Postgres durable store for 42 CSE faculty profiles and line items",
+        "WebSocket broadcast syncs changes live across HOD and Faculty portals",
+        "Print-ready cryptographic certificates and NAAC accreditation dossiers"
+      ]
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 import React from "react";
-import { GraduationCap, BarChart3, UserCheck, Building2, ShieldCheck } from "lucide-react";
+import { GraduationCap, BarChart3, UserCheck, Building2, ShieldCheck, Network, ExternalLink } from "lucide-react";
 
 interface HeaderProps {
   activeTab: "hod" | "faculty" | "aggregate_report";
@@ -105,6 +105,18 @@ export const Header: React.FC<HeaderProps> = ({
               <Building2 className="size-3.5" />
               <span>Report</span>
             </button>
+
+            <a
+              href="/faculty-appraisal-architecture.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 px-3 sm:px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-indigo-600 hover:bg-slate-200/50 transition-all cursor-pointer"
+              title="Open Interactive Archify Architecture Diagram in new tab"
+            >
+              <Network className="size-3.5" />
+              <span className="hidden sm:inline">Archify Diagram</span>
+              <ExternalLink className="size-3 text-slate-400" />
+            </a>
           </nav>
 
         </div>
