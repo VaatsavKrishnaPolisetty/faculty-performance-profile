@@ -525,7 +525,7 @@ export const FacultyReviewDrawer: React.FC<FacultyReviewDrawerProps> = ({
           <div className="p-6 space-y-5 flex-1">
             <div className="space-y-2">
               <label className="text-xs font-bold text-slate-900 block">
-                Official Head of Department (HOD) Assessment Remarks
+                Official Head of Department (HOD: Dr. S V Phani Kumar) Assessment Remarks
               </label>
               <textarea
                 value={hodRemarks}
@@ -555,7 +555,7 @@ export const FacultyReviewDrawer: React.FC<FacultyReviewDrawerProps> = ({
             {isSaved && (
               <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs flex items-center gap-2">
                 <CheckCircle className="size-4 text-emerald-600" />
-                <span>HOD Evaluation recorded successfully. Appraisal brief ready for official signing.</span>
+                <span>HOD Evaluation recorded successfully. Appraisal brief ready for official signing by Dr. S V Phani Kumar.</span>
               </div>
             )}
 

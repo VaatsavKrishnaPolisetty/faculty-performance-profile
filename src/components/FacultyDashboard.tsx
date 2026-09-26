@@ -268,7 +268,7 @@ export const FacultyDashboard: React.FC<FacultyDashboardProps> = ({
             </h3>
             <p className="text-xs text-slate-600 mt-0.5">
               {isConfirmed
-                ? "You have reviewed and formally verified all institutional metrics. Pending HOD final sign-off."
+                ? "You have reviewed and formally verified all institutional metrics. Pending HOD (Dr. S V Phani Kumar) final sign-off."
                 : "Every dimension has been verified from enterprise ERP, LMS, and Scopus databases so you verify rather than compile."}
             </p>
           </div>

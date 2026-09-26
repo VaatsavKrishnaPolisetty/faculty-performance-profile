@@ -49,7 +49,7 @@ export const Header: React.FC<HeaderProps> = ({
                 </span>
               </div>
               <p className="text-[11px] text-slate-500 truncate">
-                VFSTR • Department of Computer Science & Engineering
+                VFSTR • Department of CSE • HOD: Dr. S V Phani Kumar
               </p>
             </div>
           </div>

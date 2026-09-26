@@ -196,7 +196,7 @@ export const COHORT_FACULTY_DATA: FacultyRecord[] = [
     "department": "Department of Computer Science & Engineering",
     "school": "School of Computing & Informatics",
     "qualification": "Ph.D",
-    "designation": "Associate Professor",
+    "designation": "Professor & Head (HOD)",
     "level": "Level 12",
     "dateOfJoin": "2020-07-01",
     "campus": "Guntur",
@@ -328,6 +328,7 @@ export const COHORT_FACULTY_DATA: FacultyRecord[] = [
       "remedialStudentPercent": 15,
       "administrativeBurdenHours": 14,
       "administrativeRoles": [
+        "Head of the Department (HOD) - CSE",
         "NBA Criteria 3 Coordinator",
         "Research Lab Head"
       ],

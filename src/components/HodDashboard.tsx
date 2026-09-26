@@ -138,7 +138,7 @@ export const HodDashboard: React.FC<HodDashboardProps> = ({
               Department of Computer Science & Engineering
             </h1>
             <p className="text-slate-600 text-sm leading-relaxed">
-              Executive Head of Department (HOD) oversight console. Review verified platform data, contextualize teaching and administrative loads against research outputs, and certify outcome grades capped at 999 points.
+              Executive oversight console for Head of Department (HOD: <span className="font-semibold text-slate-900">Dr. S V Phani Kumar</span>). Review verified platform data, contextualize teaching and administrative loads against research outputs, and certify outcome grades capped at 999 points.
             </p>
           </div>
 

@@ -260,7 +260,7 @@ export const AppraisalBriefModal: React.FC<AppraisalBriefModalProps> = ({
 
             <div className="space-y-4">
               <div className="h-7 flex items-end justify-center font-serif italic text-cyan-700 text-sm">
-                Dr. K. V. Krishna Kishore
+                Dr. S V Phani Kumar
               </div>
               <div className="border-t border-slate-300 pt-1.5">
                 <span className="font-bold text-slate-800 block">Head of Department (HOD)</span>

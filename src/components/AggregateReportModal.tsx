@@ -190,7 +190,7 @@ export const AggregateReportModal: React.FC<AggregateReportModalProps> = ({
           {/* Approval Signatures */}
           <div className="grid grid-cols-2 gap-8 pt-6 border-t border-slate-200 text-center text-xs text-slate-500 print-break-inside-avoid">
             <div className="space-y-4">
-              <div className="h-6 flex items-end justify-center font-serif italic text-cyan-700 font-semibold">Dr. K. V. Krishna Kishore</div>
+              <div className="h-6 flex items-end justify-center font-serif italic text-cyan-700 font-semibold">Dr. S V Phani Kumar</div>
               <div className="border-t border-slate-300 pt-1.5">
                 <span className="font-bold text-slate-800 block">Head of Department (CSE)</span>
               </div>
